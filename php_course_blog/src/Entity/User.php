@@ -1,11 +1,9 @@
 <?php 
 
 namespace App\Entity;
-use App\Entity\Image;
 
 class User
 {
-    private ?Image $image;
 
     public function __construct(
         private ?int $id, private string $firstName, 

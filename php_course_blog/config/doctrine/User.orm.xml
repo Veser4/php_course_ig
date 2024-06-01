@@ -8,22 +8,21 @@
         <id name="id" type="integer" column="user_id">
             <generator strategy="IDENTITY"/>
         </id>
-
-        <field name="firstName" column="first_name" type="string" length="200" nullable="false" />
-        <field name="lastName" column="last_name" type="string" length="200" nullable="false" />
-        <field name="middleName" column="middle_name" type="string" nullable="true" />
-        <field name="gender" column="gender" type="string" nullable="false" />
-        <field name="birthDate" column="birth_date" type="string" nullable="false" />
-        <field name="email" column="email" type="string" nullable="false" />
-        <field name="phone" column="phone" type="string" nullable="true" />
-        <field name="avatarPath" column="avatar_path" type="string" nullable="true" />
-
-
         <unique-constraint name="email_idx">
             <unique-column name="email"/>
         </unique-constraint>
         <unique-constraint name="phone_idx">
             <unique-column name="phone"/>
         </unique-constraint>
+        <field name="firstName" column="first_name" type="string" length="200" nullable="false" />
+        <field name="lastName" column="last_name" type="string" length="200" nullable="false" />
+        <field name="middleName" column="middle_name" type="string" nullable="true" />
+        <field name="gender" column="gender" type="string" nullable="false" />
+        <field name="birthDate" column="birth_date" type="string" nullable="false" />
+        <field name="email" column="email" type="string" unique="true" nullable="false" />
+        <field name="phone" column="phone" type="string" unique="true" nullable="true" />
+        <field name="avatarPath" column="avatar_path" type="string" nullable="true" />
+
+
     </entity>
 </doctrine-mapping>
