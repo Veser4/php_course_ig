@@ -34,7 +34,12 @@ class ImageService implements ImageServiceInterface
 
     public function getUploadUrlPath(string $fileName): string
     {
-        return "/assets/$fileName";
+        return "assets/$fileName";
+    }
+
+    public function deleteImageFromUploads(string $path)
+    {
+        unlink($path);
     }
 
     private function getUploadPath(string $fileName): string

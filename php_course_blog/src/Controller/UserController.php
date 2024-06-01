@@ -5,6 +5,7 @@ use App\Entity\User;
 use App\Service\ImageServiceInterface;
 use App\Service\UserServiceInterface;
 use App\View\PhpTemplateEngine;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +31,16 @@ class UserController extends AbstractController
         try
         {
             $imagePath = (!empty($request->files->get('avatar_path'))) ? $this->imageService->moveImageToUploads($request->files->get('avatar_path')) : null;
+            $keys = $request->request->keys();
+            foreach($keys as $key) {
+                if (($key !== 'middle_name') && ($key !== 'phone') && ($key !== 'avatar_path')) 
+                {
+                    if (empty($request->get($key))) 
+                    {
+                        throw new Exception('Empty ' . $key . ' field!');
+                    }
+                }
+            }
             $userId = $this->userService->saveUser(
             $request->get('first_name'),
             $request->get('last_name'),
@@ -81,8 +92,33 @@ class UserController extends AbstractController
         return $this->redirectToRoute('index', [], Response::HTTP_SEE_OTHER);
     }
 
-    public function updateUser(Request $request)
+    public function updateUser(Request $request) : Response
     {
+        $currentUser = $this->userService->getUser($request->get('user_id'));
+        $imagePath = (!empty($request->files->get('avatar_path'))) ? $this->imageService->moveImageToUploads($request->files->get('avatar_path')) : $currentUser->getAvataPath();
+        if (!empty($request->files->get('avatar_path'))) 
+        {
+            $this->imageService->deleteImageFromUploads($this->imageService->getUploadUrlPath($currentUser->getAvataPath()));
+        }
+        try {
+            $userId = $this->userService->updateUser(
+                $request->get('user_id'),
+                (!empty($request->get('first_name'))) ? $request->get('first_name') : $currentUser->getFirstName(),
+                (!empty($request->get('last_name'))) ? $request->get('last_name') : $currentUser->getLastName(),
+                (!empty($request->get('middle_name'))) ? $request->get('middle_name') : $currentUser->getMiddleName(),
+                (!empty($request->get('gender'))) ? $request->get('gender') : $currentUser->getGender(),
+                (!empty($request->get('birth_date'))) ? $request->get('birth_date') : $currentUser->getBirthDate(),
+                (!empty($request->get('email'))) ? $request->get('email') : $currentUser->getEmail(),
+                (!empty($request->get('phone'))) ? $request->get('phone') : $currentUser->getPhone(),
+                $imagePath,
+            );
+            return $this->redirectToRoute('show_user', ['user_id' => $userId], Response::HTTP_SEE_OTHER);
+        } 
+        catch (\Exception $e) 
+        {
+            return $this->render('error_page.html.twig', ['error' => $e->getMessage()]);
+        }
+        
     }
 
 }

@@ -12,4 +12,6 @@
     public function deleteUser(int $userId): void;
 
     public function listUsers(): array;
+
+    public function updateUser(int $userId, string $firstName, string $lastName, ?string $middleName, string $gender, string $birthDate, string $email, ?string $phone, ?string $avatarPath) : int;
 }

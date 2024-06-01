@@ -8,4 +8,5 @@ interface ImageServiceInterface
 {
     public function moveImageToUploads(UploadedFile $file): ?string;
     public function getUploadUrlPath(string $fileName): string;
+    public function deleteImageFromUploads(string $fileName);
 }

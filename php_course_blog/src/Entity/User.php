@@ -98,7 +98,7 @@ class User
        return $this->avatarPath;
     }
 
-    public function setAvataPath(String $avatarPath)
+    public function setAvataPath($avatarPath)
     {
        $this->avatarPath = $avatarPath;
     }

@@ -55,6 +55,20 @@
             $this->repository->delete($user);
         }
 
+        public function updateUser(int $userId, string $firstName, string $lastName, ?string $middleName, string $gender, string $birthDate, string $email, ?string $phone, ?string $avatarPath): int
+        {
+            $user = $this->repository->findById($userId);
+            $user->setFirstName($firstName);
+            $user->setLastName($lastName);
+            $user->setMiddleName($middleName);
+            $user->setGender($gender);
+            $user->setBirthDate($birthDate);
+            $user->setEmail($email);
+            $user->setPhone($phone);
+            $user->setAvataPath($avatarPath);
+            return $this->repository->store($user);
+        }
+
         public function listUsers(): array
         {
             return $this->repository->getAllUsers();
